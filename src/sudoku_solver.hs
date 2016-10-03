@@ -15,14 +15,14 @@ cartesianProd (list,sizeOfBoard) = [(x,y,sizeOfBoard) | x <- list, y <- list]
 
 -- Each of sudoku cell is being represented as triples where the first and second
 -- entry specify the row and colum (zero indexed) and the third value is representing the 
--- label that being given the value is lie within the range of (1-9)
+-- label that being given the value is lie within the range of (1-N)
 -- In the further assistance we will create a bijection function between the triples and
 -- natural numbers that will serve as the boolean variable name
 -- The param of this function, which is (i, j, k) will representing the row, column, and
--- The index that lies within the value of (1..9)
+-- The index that lies within the value of (1..N)
 -- The function that being created here is given as follows:
--- the third value will be multiplied by the constant of 81
--- the second value will be multiplied by the constant of 9
+-- the third value will be multiplied by the constant of NxN
+-- the second value will be multiplied by the constant of N
 -- the third value will be written as it is.
 cellToVar (i,j,k,sizeOfBoard) = fromIntegral $ (k-1)*sizeOfBoard*sizeOfBoard + i*sizeOfBoard + j + 1
 
