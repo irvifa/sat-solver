@@ -1,20 +1,37 @@
 # computational-logic-assignment
 
-## Build
+## docs
+
+
+### Build
 
 ```bash
 make build
 ```
 
-## Clean
+### Clean
 
 ```bash
 make clean
 ```
 
-## Run
+## src
 
-``bash
+### Build
+
+```bash
+make build
+```
+
+### Clean
+
+```bash
+make clean
+```
+
+### Run
+
+```bash
 make run PUZZLE=${PATH_TO_PUZZLE}
 ```
 
