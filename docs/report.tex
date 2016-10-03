@@ -1,339 +1,152 @@
-\documentclass[11pt,a4paper,titlepage]{article}
-\usepackage[a4paper]{geometry}
+%
+%
+% Law Review Article Template
+% A "universal" template 
+% 
+%
+
+\documentclass[letterpaper,12pt,twoside]{article}
+
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{lipsum}
-
-\usepackage{amsmath, amssymb, amsfonts, amsthm, fouriernc, mathtools}
-% mathtools for: Aboxed (put box on last equation in align envirenment)
-\usepackage{microtype} %improves the spacing between words and letters
-
-\usepackage{graphicx}
-\graphicspath{ {./pics/} {./eps/}}
-\usepackage{epsfig}
-\usepackage{epstopdf}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% COLOR DEFINITIONS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[svgnames]{xcolor} % Enabling mixing colors and color's call by 'svgnames'
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{MyColor1}{rgb}{0.2,0.4,0.6} %mix personal color
-\newcommand{\textb}{\color{Black} \usefont{OT1}{lmss}{m}{n}}
-\newcommand{\blue}{\color{MyColor1} \usefont{OT1}{lmss}{m}{n}}
-\newcommand{\blueb}{\color{MyColor1} \usefont{OT1}{lmss}{b}{n}}
-\newcommand{\red}{\color{LightCoral} \usefont{OT1}{lmss}{m}{n}}
-\newcommand{\green}{\color{Turquoise} \usefont{OT1}{lmss}{m}{n}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% FONTS AND COLORS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    SECTIONS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{mathptmx}
+\usepackage{lipsum} % You can remove this package if you do not want to use filler text.
 \usepackage{titlesec}
-\usepackage{sectsty}
-%%%%%%%%%%%%%%%%%%%%%%%%
-%set section/subsections HEADINGS font and color
-\sectionfont{\color{MyColor1}}  % sets colour of sections
-\subsectionfont{\color{MyColor1}}  % sets colour of sections
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage[all]{nowidow}
+\usepackage{url}
+\usepackage{tocloft}
+\usepackage[headheight=110pt]{geometry}
 
-%set section enumerator to arabic number (see footnotes markings alternatives)
-\renewcommand\thesection{\arabic{section}.} %define sections numbering
-\renewcommand\thesubsection{\thesection\arabic{subsection}} %subsec.num.
-
-%define new section style
-\newcommand{\mysection}{
-\titleformat{\section} [runin] {\usefont{OT1}{lmss}{b}{n}\color{MyColor1}} 
-{\thesection} {3pt} {} } 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%		CAPTIONS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{caption}
-\usepackage{subcaption}
-%%%%%%%%%%%%%%%%%%%%%%%%
-\captionsetup[figure]{labelfont={color=Turquoise}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%		!!!EQUATION (ARRAY) --> USING ALIGN INSTEAD
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%using amsmath package to redefine eq. numeration (1.1, 1.2, ...) 
-%%%%%%%%%%%%%%%%%%%%%%%%
-\renewcommand{\theequation}{\thesection\arabic{equation}}
-
-%set box background to grey in align environment 
-\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+%------
 \makeatletter
-\patchcmd{\@Aboxed}{\boxed{#1#2}}{\colorbox{black!15}{$#1#2$}}{}{}%
-\patchcmd{\@boxed}{\boxed{#1#2}}{\colorbox{black!15}{$#1#2$}}{}{}%
+\renewcommand\normalsize{\@setfontsize\normalsize{12}{14}}
+\renewcommand\small{\@setfontsize\small{10}{12}}
+\renewcommand\scriptsize{\@setfontsize\scriptsize{7}{8}}
+\renewcommand\tiny{\@setfontsize\tiny{5}{6}}
+\renewcommand\large{\@setfontsize\large{13}{15}}
+\renewcommand\Large{\@setfontsize\Large{14}{16}}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\renewcommand{\theparagraph}{\alph{paragraph}}
+\renewcommand{\thesubparagraph}{\roman{subparagraph}}
+%------
+\titleformat{\section}[block]{\normalfont\normalsize\scshape\center}{\thesection.}{1em}{}
+\titleformat{\subsection}[block]{\normalfont\itshape\center}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}{\normalfont}{\thesubsubsection.}{1em}{}
+\titleformat{\paragraph}{\normalfont}{\theparagraph.}{1em}{}
+\titleformat{\subparagraph}{\normalfont\small}{\thesubparagraph.}{1em}{}
+\titlespacing{\subparagraph}{0pt}{12pt}{12pt}
 \makeatother
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\renewcommand\contentsname{\hspace*{\fill}\normalfont\normalsize\scshape Table of Contents\hspace*{\fill}}   
+\renewcommand\cftsecfont{\normalfont\normalsize\scshape}
+\renewcommand\cftsubsecfont{\normalfont\normalsize\itshape}
+\renewcommand\cftsubsubsecfont{\normalfont\normalsize}
+\renewcommand\cftparafont{\normalfont\normalsize}
+\renewcommand\cftsubparafont{\normalfont\small}
+\renewcommand\cftsecpagefont{\normalfont\normalsize}
+\renewcommand\abstractname{\normalfont\normalsize\scshape Problem}
 
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
 
+\cftsetindents{section}{3em}{3em}
+\cftsetindents{subsection}{4em}{3em}
+\cftsetindents{subsubsection}{5em}{3em}
+\cftsetindents{paragraph}{6em}{3em}
+\cftsetindents{subparagraph}{7em}{3em}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% DESIGN CIRCUITS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[siunitx, american, smartlabels, cute inductors, europeanvoltages]{circuitikz}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancypagestyle{mypagestyle}{%
+  \fancyhf{}% Clear header/footer
+  \fancyhead[OC]{\uppercase{Title Of The Article Here}}% Title on Odd pages, center.
+  \fancyhead[OR]{\thepage}
+  \fancyhead[EC]{\uppercase{Title Of The Article Here}}% Title on Even page, center.
+  \fancyhead[EL]{\thepage}
+  \fancyfoot[O]{}
+  \fancyfoot[E]{}
+  \renewcommand{\headrulewidth}{0pt}% Removes header rule
+}
+\pagestyle{mypagestyle}
 
+\title{\Large{\uppercase{Computational Logic Assignment\\\textit{SAT Solver}}}}
+\author{\large\emph{Author1}\\\emph{Author2}}
+%-- If you have more than one author and they have different affiliations, put the percent sign before
+%-- the \author command above and remove it from the start of the \author command below.
 
+%\author{\large\emph{Name of Author1}\thanks{Author affiliation1.} \and \large\emph{Name of Author2}\thanks{Author affiliation2.} \and \large\emph{Name of Author3}\thanks{Author affiliation3.}}
 
-\makeatletter
-\let\reftagform@=\tagform@
-\def\tagform@#1{\maketag@@@{(\ignorespaces\textcolor{red}{#1}\unskip\@@italiccorr)}}
-\renewcommand{\eqref}[1]{\textup{\reftagform@{\ref{#1}}}}
-\makeatother
-\usepackage{hyperref}
-\hypersetup{colorlinks=true}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% PREPARE TITLE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{\blue Introduction to Electrical Engineering 2 \\
-\blueb Assignment Solution $1$}
-\author{Igor Shevtsov}
-\date{\today}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+%--
+\date{} % Leave blank for no date. If you fill in the date it will appear below the author's name	
 
 \begin{document}
+\urlstyle{same}
+
 \maketitle
+\thispagestyle{empty}
 
-\section{Question 1 Solution}{%
-\subsection{Section 1}{Following equations describe current-voltage relations between some%
-\footnote{Resistor, Capacitor and Inductor} circuit elements:%
-\begin{align}
-v_R&=iR \label{eq:1} \\
-i_C&=C\dot{v}_C \label{eq:2} \\
-v_L&=L\dot{i}_L \label{eq:3}
-\end{align}
-Applying nodal method at the $v_L$ node of circuit on Figure~\ref{fig:q1fig}
-\begin{align}
-I_0=\dfrac{v_L}{R}+i_L  \label{eq:4}
-\end{align}
-Using \eqref{eq:3} one could obtain a differential equation
-\begin{align}
-\Aboxed{\dot{i_L}(t)+\tfrac{R}{L}i_L(t)&=\tfrac{R}{L}I_0 \quad,\, t>0} \label{eq:5}
-\end{align}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ctikzset {bipoles/length=1.2cm}
-\begin{figure}[!htb]
-\centering
-\begin{circuitikz}[scale =1.2]\draw
-(0,0) to [current source = $I_0$] (0,2) -- (2,2)
-node[anchor=south] {$v_L$}
-to [R, l_= $R$, i>^=$i_R(t)$, *-] (2,0)
- (2,2) -- (4,2) to [L=$L$, i>^=$i_L(t)$, v=$v_L(t)$] (4,0) -- (0,0)
-;\end{circuitikz}
-\caption{\green Electric Circuit}
-\label{fig:q1fig}
-\end{figure}
-}\label{sub:sub1}
-%%% END UBSECTION 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 2}{
-Assuming circuit's steady state, yields constant\footnote{Resistor Shortened by Inductor} current, therefore
-\begin{align}
-\textsl{ZSR:\quad} \Aboxed{i_L&=I_0 \label{eq:6}}
-\end{align}
-\begin{proof}
-Solving ZIR of the equation~\eqref{eq:5} :
-\begin{align}
-i_{L,ZIR}(t)=A\exp({\dfrac{-t}{\tau}})\label{eq:7}\\
-\lim_{t \to \infty}i_{L}(t)=\lim_{t \to \infty}\left(i_{L, ZIR}+i_{L,ZSR}\right)=i_{L, ZSR}=I_0 \nonumber
-\end{align}
-\end{proof}
-}\label{sub:sub2}%
-%%% END SUBSECTION 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 3}{
-Summarizing equation~\eqref{eq:6} with \eqref{eq:7} and activating given initial condition $i_L(t=0)=2~\si{\A}$ results in final solution $i_L(t)$, where $\tau=\frac{L}{R}$:
-\begin{align*}
-\Aboxed{i_{L}(t)=I_0+\left(2- I_0\right)exp\left({\dfrac{-t}{\tau}}\right) \quad, t>0}
-\end{align*}
-\begin{figure}[!htb]
-\centering
-\includegraphics[scale=.3]{fig2.eps}
-\caption{\green Inductor Current with $I_0=1A$}
-\label{fig:q1fig2}
-\end{figure}
-}\label{sub:sub3}
-%%% END SUBSECTION 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-}\label{sec:q1sec}
-%%% END SECTION 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\begin{abstract}
+	This is a generic template for a law review article. It is modeled after the Word law review article template that Eugene Volokh created. You can get to Professor Volokh's template here: \url{http://www2.law.ucla.edu/volokh/writing/}. This template, in addition to converting the coding from Word to \LaTeX,~adds some features. It includes the option of having multiple authors, using a table of contents, and including an abstract. The code indicates how to modify the template for an article with multiple authors and how to remove the table of contents, the abstract, or both. While there have been a few attempts to create a package that will automatically format citations using the Bluebook style, they have not gone very far or been very successful. So, you are left on your own. I have given examples in the text of how to use \LaTeX~codes to achieve the Bluebook style, which may help guide you. These should help you with most of the typesetting styles you need, and you can use the Bluebook to determine the particular requirements for a cite. 
+	\end{abstract}
 
+\clearpage
+\tableofcontents % Delete this line and the next line and the next two lines if you do not want a table of contents
+\vspace{14pt}
+\clearpage
 
+\addcontentsline{toc}{section}{Introduction} % Delete if no Table of Contents
+\section*{Introduction}
 
-\section{Question 2 Solution}{
-\subsection{Section 1}{
-Consider the circuit on Figure~\ref{fig:q2fig1b}. Now\footnote{Inductor is Short} applying current divider technique one could easily calculate the following currents:\par
-\begin{align*}
-i_1 = \dfrac{40}{500+2k||6k}\cdot\dfrac{2k}{500+2k||6k}\\ \\
-i_2 = \dfrac{40}{500+2k||6k}\cdot\dfrac{6k}{500+2k||6k}\\ \\
-\Aboxed{i_1(0^-)=20\,\si{mA} \qquad i_2(0^-)=60\,\si{mA}}
-\end{align*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ctikzset {bipoles/length=.8cm}
-\begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-\begin{circuitikz}[scale =.6]\draw
-(0,0) to [voltage source = $40\,\si{\volt}$] (0,3)
-to [R = $500~\si{\ohm}$] (2,3)
-to [opening switch, l_= {t>0}] (3,3) -- (4,3)
-node[anchor=south]{$v_x$}
-to [R = $6~\si{\kohm}$, i>_=$i_1$, *-] (7,3)
-to [L, l_= $400~\si{m\henry}$] (7,0) -- (0,0)
-(4,3) to [R, l_= $2~\si{\kohm}$, i>_=$i_2$] (4,0)
-;\end{circuitikz}
-\caption{\green \,Superposed Circuit}
-\label{fig:q2fig1a}
-\end{subfigure}
-\begin{subfigure}{.5\textwidth}
-\begin{circuitikz}[scale =.6]\draw
-(0,0) to [voltage source = $40\,\si{\volt}$] (0,3)
-to [R = $500~\si{\ohm}$] (2,3) -- (4,3)
-to [R = $6~\si{\kohm}$, i>_=$i_1$] (6,3)
-to [L, l= $400~\si{m\henry}$] (6,0) -- (0,0)
-(3,3) node[anchor=south]{$v_x$}
-to [R, l_= $2~\si{\kohm}$, i>_=$i_2$,*-] (3,0)
-;\end{circuitikz}
-\caption{\green \,Past Time Circuit}
-\label{fig:q2fig1b}
-\end{subfigure}
-\begin{subfigure}{.4\textwidth}
-\begin{circuitikz}[scale =.6]\draw
-(0,0) to [R = $8\,\si{\kohm}$, i_<=$i_2$,-*] (0,3) -- (2,3) 
-node[anchor=south]{$v_L$}
-to [L = $400\,\si{m\henry}$, i>^=$i_1$,*-] (2,0) -- (0,0)
-;\end{circuitikz}
-\caption{\green \,Future Time Circuit}
-\label{fig:q2fig1c}
-\end{subfigure}
-\caption{\green Question 2 Circuit}
-\label{fig:q2fig1}
-\end{figure}
-}
-%%% END SUBSECTION 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 2}{
-Assuming continuity in the inductor current $i_1(0^-)=i_1(0^+)=20\,\si{\mA}$ on Figure~\ref{fig:q2fig1c}, where $i_1=-i_2$, thus, setting $i_1(0^+)=-i_2(0^+)=20\,\si{\mA}$ we get the currents
-\begin{align*}
-\Aboxed{i_1(0^+)=20\,\si{mA} \qquad i_2(0^+)=-20\,\si{\mA}}
-\end{align*}
-}
-%%% END SUBSECTION 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 3}{It's obvious, that circuits \ref{fig:q2fig1b} and \ref{fig:q2fig1c} are equivalent to the one on Figure~\ref{fig:q1fig} (Page~\pageref{fig:q1fig}) with $\tau=50~\si{\ms}$ and $I_0=V_0/R_{eq}=20~\si{\mA}$:
-\begin{align}
-\Aboxed{\dot{i_L}(t)+\tfrac{R}{L}i_L(t)&=\tfrac{R}{L}I_0 \quad,\, t>0}
-\end{align}
-}
-%%% END SUBSECTION 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 4}{Adopting ZIR\footnote{Since, there is no source in the circuit} solution~\eqref{eq:7} 
-\begin{align*}
-\Aboxed{i_1(t)&=i_1(0^+)\exp\left({\dfrac{-t}{\tau}}\right) \quad, t>0} \\
-\Aboxed{i_2(t)&=-i_1(t)}
-\end{align*}
-}
-%%% END SUBSECTION 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-}\label{sec:q2sec}
-%%% END SECTION 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lipsum[1-2] % This command inserts filler text. Replace it with your text.
 
+\section{First Level Heading}
 
+\lipsum[1]
 
-\section{Question 3 Solution}{
-\subsection{Section 1}{
-The voltage drop on the capacitor\footnote{Open-Circuited Capacitor } on Figure~\ref{fig:q3fig1b} as follows
-\begin{align}
-\Aboxed{v_C(0^-)&=15~\si{\mA} \cdot 2.4~\si{\kohm}=36~\si{\volt}  \label{eq:8}}
-\end{align}
-\ctikzset {bipoles/length=.8cm}
-\begin{figure}[!htb]
-\begin{subfigure}{\textwidth}
-\begin{circuitikz}[scale =.8]\draw
-(0,0) to [current source = $15\,\si{\mA}$] (0,3) -- (2,3)
-to [R, l= $2.4\,\si{\kohm}$] (2,0) -- (4,0)
-to [C,l_=$0.25\,\si{\micro\farad}$] (4,2.5)
-to[short, -o](3.3,3.3)
-(4,3)node[anchor=south]{t=0}
-node[ocirc] (A) at (3,3) {}
-node[ocirc] (B) at (5,3) {}
-(B) to [open, v=${}$] (A)
-(5,3)to[short, o-](6,3)--(6,5)
-to [R=$25\,\si{\kohm}$] (8,5)--(8,3)
-to [cI,l_=$\alpha \cdot v_{\phi}$] (6,3)
-(2,3)to[short,-o](3,3)
-(8,3)--(9,3)
-to [R, l_= $15~\si{\kohm}$,v^=$v_{\phi}$] (9,0) -- (0,0)
-;\end{circuitikz}
-\caption{\green \,Superposed Circuit}
-\label{fig:q3fig1a}
-\end{subfigure}
-\begin{subfigure}{.5\textwidth}
-\begin{circuitikz}[scale =1]\draw
-(0,0) to [current source = $15~\si{\mA}$] (0,2) -- (2,2)
-to [R, l_= $2.4~\si{\kohm}$] (2,0)
-(2,2) -- (4,2) 
-node[ocirc] (A) at (4,0) {}
-node[ocirc] (B) at (4,2) {}
-(B) to [open, v^=${v_c}$] (A)
-(0,0)--(4,0)
-;\end{circuitikz}
-\caption{\green \,Past Time Circuit}
-\label{fig:q3fig1b}
-\end{subfigure}
-\begin{subfigure}{.4\textwidth}
-\begin{circuitikz}[scale =.6]\draw
-node[ocirc] (A) at (0,0) {}
-node[ocirc] (B) at (0,3) {}
-(B) to [open, v=${v_t}$] (A)
-(0,3) to [short, i=${i_t}$](1,3)--(2.7,3)--(2.7,4.5) 
-to [R, l_= $25~\si{\kohm}$] (6.5,4.5)--(6.5,2.2)
-to [cI, l= $\alpha \cdot v_{\phi}$] (2.7,2.2)--(2.7,3)
-(6.5,3)--(8,3) to [R, l_= $15~\si{\kohm}$,v^=$v_{\phi}$] (8,0)--(0,0)
-;\end{circuitikz}
-\caption{\green \,Future Time Circuit}
-\label{fig:q3fig1c}
-\end{subfigure}
-\caption{\green Question 3 Circuit}
-\label{fig:q3fig1}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-}
-%%% END SUBSECTION 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 2}{
-Replacing capacitor with a test voltage, as shown on Figure~\ref{fig:q3fig1c}, allows input resistance calculation $R_{in}=\dfrac{v_t}{i_t}$
-\begin{align}
-v_t-v_{\phi}&=25k\alpha \cdot v_{\phi} \nonumber \\
-v_t=(1+25k\alpha) \cdot v_{\phi}&=15k(1+25k\alpha) \cdot i_t \nonumber \\
-\Aboxed{R_{in}(C)&=15k(1+25k\alpha) \label{eq:10}}
-\end{align}
-}
-%%% END SUBSECTION 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 3}{Given circuit's time constant $\tau=R \cdot C=25~\si{ms}$ requires resistor $R=100~\si{\kohm}$. Setting into~\eqref{eq:10} leads to the value of $\alpha$-parameter
-\begin{align*}
-\Aboxed{\alpha \approx 2.26 \cdot 10^{-4}}
-\end{align*}
-}
-%%% END SUBSECTION 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Section 4}{As before\footnote{Due to circuits analogy} using ZIR solution~\eqref{eq:7} adapted for voltages, where $\tau=25~\si{ms}$ and initial condition of the capacitor\footnote{Continuity in voltage drop} $v_C(0^-)=v_C(0^+)=36~\si{\volt}$
-\begin{align*}
-\begin{cases}
-\Aboxed{v_C(t)&=v_C(0^+)\exp\left({\dfrac{-t}{\tau}}\right) \quad, t\geqslant0} \\
-\Aboxed{v_C(t)&=v_C(0^-) \hspace{5.1em}, t<0} \\
-\end{cases}
-\end{align*}
-}
-%%% END SUBSECTION 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-}\label{sec:q3sec}
-%%% END SECTION 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\begin{quote}
+		\lipsum[2]
+	\end{quote}
 
+\subsection{Second-Level Heading}
 
+\lipsum[3]
+
+The following list includes some examples of citations formatted according to the Bluebook style. These examples demonstrated how to use \LaTeX~typesetting codes to achieve the Bluebook style, but are not intended to explain how you should cite properly using the Bluebook style.
+
+	\begin{itemize}
+		\item Case: Jackson v. Metropolitan Edison Co., 348 F. Supp. 954, 956--58 (M.D. Pa. 1972), \emph{aff'd}, 483 F.2d 754 (3d Cir. 1973), \emph{aff'd}, 419 U.S. 345 (1974)
+		\item Constitution: \textsc{N.M. Const.} art. IV. \S~7
+		\item Statute: Administrative Procedure Act \S~6, 5 U.S.C. \S 555 (1982)
+		\item Legislative Materials: H.R. 3055, 94th Cong., 2d Sess. \S~2, 122 \textsc{Cong. Rec.} 16,870 (1976)
+		\item Book: 2 \textsc{F. Pollock \& F. Maitland, The History of English Law} 201--14 (1895)
+		\item Work not formally printed: H. Wechsler, Remarks at the Meeting of the Bar of the Supreme Court of the United States in Memory of Chief Justice Stone 5 (Nov. 12, 1947) (available in Columbia Law School Library)
+		\item Periodical: Rees, \emph{Legislative Jurisdiction}, 78 \textsc{Colum. L. Rev.} 1587, 1591--94 (1978)
+		\item	Newspaper: Boston Globe, Oct. 14, 1954, at 6, col. 1
+		\item Treaty: Parcel Post Agreement, June 3--14, 1951, United States-Gold Coast Colony, art. IV, 2 U.S.T. 1859, 1862, T.I.A.S. No. 2322, at 4
+	\end{itemize}
+
+This is a sentence with a footnote at the end that cites a case, a journal article, and a book, and includes a block quote.\footnote{\emph{See, e.g.,} Mapp v. Ohio, 367 U.S. 643 (1961); J.J. Prescott et al., \emph{Understanding Noncompetition Agreements: The 2014 Noncompete Survey Project}, 2016 \textsc{Mich. St. L. Rev.} 369 (2016); \textsc{Kenneth Culp Davis, Police Discretion 98--120 (1975)}. This is the block quote:
+	\begin{quote}
+		\lipsum[4]
+	\end{quote}
+	\emph{Id}. at 118.}
+
+\subsubsection{Third-level heading}
+
+\lipsum[5]
+
+\paragraph{Fourth-level heading}
+
+\noindent\lipsum[6]
+
+\subparagraph{Fifth-level heading}
+
+\noindent\lipsum[7]
+
+\addcontentsline{toc}{section}{Conclusion} % Delete if no Table of Contents
+\section*{Conclusion}
+
+\lipsum[8]
 
 \end{document}
