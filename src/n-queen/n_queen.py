@@ -12,14 +12,17 @@ class NQueen(object):
 	"""
 	def gen_rules(self):
 		cnfFile= open(self.cnfFileName,"w")
-		
+		cnt = 0
+		rules = []
 		for i in range(0,self.sizeOfBoard):
 		 tmp=''
 		 for j in range(1,self.sizeOfBoard+1):
 		  number=str(j+self.sizeOfBoard*i)
 		  tmp=tmp+number+" "
 		 tmp=tmp+" 0\n"
-		 cnfFile.write(tmp)
+		 cnt+=1
+		 rules.append(tmp)
+		 #cnfFile.write(tmp)
 
 		#constraints on rows
 		for i in range(0,self.sizeOfBoard):
@@ -27,7 +30,9 @@ class NQueen(object):
 		   number=j+self.sizeOfBoard*i
 		   for l in range(1,self.sizeOfBoard-j+1):
 			tmp="-"+str(number)+" -"+str(number+l)+" 0\n"
-			cnfFile.write(tmp)
+		 	cnt+=1
+		 	rules.append(tmp)
+			#cnfFile.write(tmp)
 		
 		#constraints on columns
 		for j in range(1,self.sizeOfBoard+1):
@@ -35,7 +40,9 @@ class NQueen(object):
 		   number=j+self.sizeOfBoard*i;
 		   for l in range(1,self.sizeOfBoard-i):
 			tmp="-"+str(number)+" -"+str(number+self.sizeOfBoard*l)+" 0\n"
-			cnfFile.write(tmp)
+			cnt+=1
+		 	rules.append(tmp)
+			#cnfFile.write(tmp)
 
 		#constraints on NW->SE diagonal
 		# part 1, upper bound triangle
@@ -44,15 +51,19 @@ class NQueen(object):
 		  number=j+1+self.sizeOfBoard*i
 		  for l in range(1,self.sizeOfBoard-j):
 			tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard+1))+" 0\n"
-			cnfFile.write(tmp)
+		 	cnt+=1
+		 	rules.append(tmp)
+			#cnfFile.write(tmp)
 
 		# part 2, lower bound triangle
 		for i in range(0,self.sizeOfBoard-1):
 		 for j in range(0,i):
 		  number=j+1+self.sizeOfBoard*i
 		  for l in range(1,self.sizeOfBoard-i):
-		   tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard+1))+" 0\n"
-		   cnfFile.write(tmp)
+		   	tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard+1))+" 0\n"
+		 	cnt+=1
+		 	rules.append(tmp)
+		   	#cnfFile.write(tmp)
 
 		#constraints on NE->SW diagonal
 		# part 1, upper bound triangle
@@ -60,8 +71,10 @@ class NQueen(object):
 		 for j in range(0,self.sizeOfBoard-i):
 		  number=j+1+self.sizeOfBoard*i
 		  for l in range(1,j+1):
-		   tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard-1))+" 0\n"
-		   cnfFile.write(tmp);
+		   	tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard-1))+" 0\n"
+		 	cnt+=1
+			rules.append(tmp)
+		   	#cnfFile.write(tmp);
 
 		# part 2, lower bound triangle
 		for i in range(0,self.sizeOfBoard):
@@ -70,7 +83,14 @@ class NQueen(object):
 		  if (number != self.sizeOfBoard*self.sizeOfBoard ):
 		   for l in range(1,self.sizeOfBoard-i):
 			tmp="-"+str(number)+" -"+str(number+l*(self.sizeOfBoard-1))+" 0\n"
-			cnfFile.write(tmp)
+		 	cnt+=1
+		 	rules.append(tmp)
+			#cnfFile.write(tmp)
+		
+		line = "p cnf " + str(self.sizeOfBoard*self.sizeOfBoard) + " " + str(cnt) + "\n"
+		cnfFile.write(line)
+		for i in range(0,cnt):
+			cnfFile.write(rules[i])
 			
 		cnfFile.close();
 	
@@ -97,8 +117,7 @@ def main():
 	n=int(sys.argv[1]);
 
 	if (len(sys.argv)<2):
-	 print "Usage: python queen.py <sizeOfBoard>  "
-	 print "Or, just: python queen.py "
+	 print "Usage: python n_queen.py <sizeOfBoard>  "
 	 exit();
 
 	cnfFileName="rules.cnf"
