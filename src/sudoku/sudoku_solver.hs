@@ -91,7 +91,7 @@ cnfToDIMACS cnf = header ++ (unlines $ map showClause cnf)
 minisatRunner cnf = do
 	let dimacs = cnfToDIMACS cnf
 	writeFile "sudoku.cnf" dimacs
-	system "./minisat/core/minisat sudoku.cnf sudoku.out"
+	system "./../minisat/core/minisat sudoku.cnf sudoku.out"
 	vars <- preProcessOutput <$> readFile "sudoku.out"
 	return vars
 
