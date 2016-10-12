@@ -1,0 +1,44 @@
+#:kivy 1.9.1
+
+<Cell>:
+    text: ""
+    font_size: 0.7 * self.width
+    padding: 0.3 * self.width, (self.height - self.line_height) / 2
+    input_filter: lambda text, from_undo: text if ( text.isdigit() and len(self.text) == 0 and 0 < int(text) < 10 ) else ""
+    multiline: False
+    cursor_color: [0, 0, 0, 0]
+
+<Board>:
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        size: root.size
+        GridLayout:
+            id: grid
+            rows: 9
+            cols: 9
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.1
+            Button:
+                text: "Toggle Size"
+                on_press: root.change()
+            Button:
+                text: "Solve"
+                on_press: root.solve()
+            Button:
+                text: "Clear Board"
+                on_press: root.clear()
+
+<ErrorMessage>:
+    text: "There are no solution for the configuration"
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    size_hint: 0.3, 0.1
+    color: 1, 0, 0, 1
+    bold: True
+   
