@@ -138,18 +138,20 @@ main = do
 	fileName <- head <$> getArgs
 	contents <- splitOneOf "\n " <$> readFile fileName
 	let pruned = map (read::String->Int) $ filter (isDigit.head) contents
-	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-	-- print sizeOfBoard
-	let matrix = chunksOf sizeOfBoard pruned
-	
-	solveList (matrix,sizeOfBoard)
+	let sizeOfBoard = length pruned
+	print sizeOfBoard
+	putStrLn $ show pruned
+	solveList (pruned,sizeOfBoard)
 
 -- Get each of 9 char from the list and then trying to find the solution of the given problem
 -- The solution of this problem will be saved in the file named answer.txt
--- solveList ([],_) = do return 0
+solveList ([],_) = do return 0
 solveList (list,sizeOfBoard) = do
-	let (puzzle, rest) = splitAt sizeOfBoard list
+	let mat = chunksOf sizeOfBoard list
+	let puzzle = head mat
+	let rest = drop size
 	-- let mat = stringToMatrix $ unlines puzzle
-	solution <- sudokuSolve $ list
+	solution <- sudokuSolve $ 
 	let ans = showMatrix solution
 	writeFile "answer.txt" ans 
+	solveList (rest,sizeOfBoard)

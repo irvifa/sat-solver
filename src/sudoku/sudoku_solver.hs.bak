@@ -136,20 +136,20 @@ showMatrix grid = unlines $ map (foldr ((++).show) []) grid
 -- File name is the sudoku puzzle that being given
 main = do 
 	fileName <- head <$> getArgs
-	contents <- splitOneOf "\n " <$> readFile fileName
-	let pruned = map (read::String->Int) $ filter (isDigit.head) contents
-	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
+	contents <- lines <$> readFile fileName
+	let pruned = filter (isDigit.head) contents
+	let sizeOfBoard = length pruned
+	putStrLn $ show pruned
 	-- print sizeOfBoard
-	let matrix = chunksOf sizeOfBoard pruned
-	
-	solveList (matrix,sizeOfBoard)
+	solveList (pruned,sizeOfBoard)
 
 -- Get each of 9 char from the list and then trying to find the solution of the given problem
 -- The solution of this problem will be saved in the file named answer.txt
--- solveList ([],_) = do return 0
+solveList ([],_) = do return 0
 solveList (list,sizeOfBoard) = do
 	let (puzzle, rest) = splitAt sizeOfBoard list
 	-- let mat = stringToMatrix $ unlines puzzle
-	solution <- sudokuSolve $ list
+	solution <- sudokuSolve $ stringToMatrix $ unlines puzzle
 	let ans = showMatrix solution
 	writeFile "answer.txt" ans 
+	solveList (rest,sizeOfBoard)
