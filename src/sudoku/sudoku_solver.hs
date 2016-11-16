@@ -4,8 +4,6 @@ import System.Process
 import Control.Applicative
 import Data.List.Split
 import System.Environment
-import Data.Char
-import System.Environment
 import System.Exit
 
 readInt:: String -> Int
@@ -135,22 +133,6 @@ stringToMatrix string = map (map (\ a -> readInt [a])) $ lines string
 showMatrix [] = "no solution"
 showMatrix grid = unlines $ map (foldr ((++).show) []) grid
 
--- Get minisat path
-getPath args = if length args==2 then last args else "minisat"
-
--- This method will solve sudoku that being given as the first param
--- File name is the sudoku puzzle that being given
-main = do 
-	args <- getArgs
-	let path = getPath args
-	let fileName = head args
-	contents <- splitOneOf "\n " <$> readFile fileName
-	let tmp = init contents
-	let pruned = map readInt tmp
-	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-	let matrix = chunksOf sizeOfBoard pruned
-	solveList (matrix,sizeOfBoard,path)
-
 -- Get each of 9 char from the list and then trying to find the solution of the given problem
 -- The solution of this problem will be saved in the file named answer.txt
 -- solveList ([],_) = do return 0
@@ -160,3 +142,35 @@ solveList (list,sizeOfBoard,path) = do
 	solution <- sudokuSolve (list,path)
 	let ans = showMatrix solution
 	writeFile "answer.txt" ans 
+
+
+-- Get minisat path
+getPath args = if length args==2 then last args else "minisat"
+
+-- This method will solve sudoku that being given as the first param
+-- File name is the sudoku puzzle that being given
+wrapper args = do
+			let path = getPath args
+			let fileName = head args
+			contents <- splitOneOf "\n " <$> readFile fileName
+			let tmp = init contents
+			let pruned = map readInt tmp
+			let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
+			let matrix = chunksOf sizeOfBoard pruned
+			solveList (matrix,sizeOfBoard,path)
+
+-- Several flag and it's usage 
+usage   = putStrLn "Usage ./sudoku_solve [input-file] [minisat-path]"
+version = putStrLn "Version 0.1"
+exit    = exitWith ExitSuccess
+die     = exitWith (ExitFailure 1)
+
+parse ["-h"] = usage   >> exit
+parse ["-v"] = version >> exit
+parse []     = usage   >> exit
+parse args     =  wrapper args >> exit
+
+guide  = unlines . reverse . lines
+
+-- Main function
+main = getArgs >>= parse >>= putStr . guide
