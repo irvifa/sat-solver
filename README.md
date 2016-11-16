@@ -35,4 +35,6 @@ make clean
 make run PUZZLE=${PATH_TO_PUZZLE}
 ```
 
-For example `make run PUZZLE=example/puzzle9x9
+For example `make run PUZZLE=example/puzzle9x9 MINISATPATH="./../minisat/core/minisat"`
+
+

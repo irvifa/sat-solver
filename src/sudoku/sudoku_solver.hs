@@ -1,10 +1,12 @@
-import Data.List;
-import System.IO;
-import System.Process;
-import Control.Applicative;
-import Data.List.Split;
-import System.Environment;
-import Data.Char;
+import Data.List
+import System.IO
+import System.Process
+import Control.Applicative
+import Data.List.Split
+import System.Environment
+import Data.Char
+import System.Environment
+import System.Exit
 
 readInt:: String -> Int
 readInt = read
@@ -88,10 +90,11 @@ cnfToDIMACS cnf = header ++ (unlines $ map showClause cnf)
 -- The output of this function is a list of integer
 -- The value is true if the list contain positive integer
 -- otherwise it's false
-minisatRunner cnf = do
+minisatRunner (cnf,path) = do
 	let dimacs = cnfToDIMACS cnf
 	writeFile "sudoku.cnf" dimacs
-	system "./../minisat/core/minisat sudoku.cnf sudoku.out"
+	let cmd = path++" sudoku.cnf sudoku.out"
+	system cmd
 	vars <- preProcessOutput <$> readFile "sudoku.out"
 	return vars
 
@@ -116,35 +119,44 @@ getConstraints (matrix,sizeOfBoard) = filter (\(_,_,a) -> a > 0) cells
 	      cells = zip3 [i `div` sizeOfBoard | i <- [0..]] (cycle [0..sizeOfBoard-1]) flat
 
 -- Solve a sudoku matrix.
-sudokuSolve matrix = do
+sudokuSolve (matrix,path) = do
 	let sizeOfBoard = length matrix
 	let mat = getConstraints (matrix, sizeOfBoard)
 	let cnf = sudokuForm (mat,sizeOfBoard)
-	minisatout <- minisatRunner cnf
+	minisatout <- minisatRunner (cnf,path)
 	return $ modelToMatrix (minisatout,sizeOfBoard)
+
+-- Given a sudoku string return a sudoku  matrix.
+-- The parameter that being given here is a string and will be converted to int
+-- before being mapped and the n converted into a matrix
+stringToMatrix string = map (map (\ a -> readInt [a])) $ lines string
 
 -- Return a string as a solution of given sudoku matrix
 showMatrix [] = "no solution"
 showMatrix grid = unlines $ map (foldr ((++).show) []) grid
 
+-- Get minisat path
+getPath args = if length args==2 then last args else "minisat"
+
 -- This method will solve sudoku that being given as the first param
 -- File name is the sudoku puzzle that being given
 main = do 
-	fileName <- head <$> getArgs
+	args <- getArgs
+	let path = getPath args
+	let fileName = head args
 	contents <- splitOneOf "\n " <$> readFile fileName
 	let tmp = init contents
 	let pruned = map readInt tmp
 	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-	-- print pruned
 	let matrix = chunksOf sizeOfBoard pruned
-	solveList (matrix,sizeOfBoard)
+	solveList (matrix,sizeOfBoard,path)
 
 -- Get each of 9 char from the list and then trying to find the solution of the given problem
 -- The solution of this problem will be saved in the file named answer.txt
 -- solveList ([],_) = do return 0
-solveList (list,sizeOfBoard) = do
+solveList (list,sizeOfBoard,path) = do
 	let (puzzle, rest) = splitAt sizeOfBoard list
 	-- let mat = stringToMatrix $ unlines puzzle
-	solution <- sudokuSolve $ list
+	solution <- sudokuSolve (list,path)
 	let ans = showMatrix solution
 	writeFile "answer.txt" ans 
