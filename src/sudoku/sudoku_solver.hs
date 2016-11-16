@@ -123,11 +123,6 @@ sudokuSolve matrix = do
 	minisatout <- minisatRunner cnf
 	return $ modelToMatrix (minisatout,sizeOfBoard)
 
--- Given a sudoku string return a sudoku  matrix.
--- The parameter that being given here is a string and will be converted to int
--- before being mapped and the n converted into a matrix
-stringToMatrix string = map (map (\ a -> readInt [a])) $ lines string
-
 -- Return a string as a solution of given sudoku matrix
 showMatrix [] = "no solution"
 showMatrix grid = unlines $ map (foldr ((++).show) []) grid
@@ -138,9 +133,9 @@ main = do
 	fileName <- head <$> getArgs
 	contents <- splitOneOf "\n " <$> readFile fileName
 	let tmp = init contents
-	let pruned = map (read::String->Int) tmp
+	let pruned = map readInt tmp
 	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-	print pruned
+	-- print pruned
 	let matrix = chunksOf sizeOfBoard pruned
 	solveList (matrix,sizeOfBoard)
 
