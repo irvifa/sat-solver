@@ -137,11 +137,11 @@ showMatrix grid = unlines $ map (foldr ((++).show) []) grid
 main = do 
 	fileName <- head <$> getArgs
 	contents <- splitOneOf "\n " <$> readFile fileName
-	let pruned = map (read::String->Int) $ filter (isDigit.head) contents
+	let tmp = init contents
+	let pruned = map (read::String->Int) tmp
 	let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-	-- print sizeOfBoard
+	print pruned
 	let matrix = chunksOf sizeOfBoard pruned
-	
 	solveList (matrix,sizeOfBoard)
 
 -- Get each of 9 char from the list and then trying to find the solution of the given problem
