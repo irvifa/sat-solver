@@ -158,12 +158,12 @@ wrapper args = do
 genMore = do
 		let cnfFile = "sudoku.cnf"
 		let solFile = "sudoku.out"
-		let path = "./../minisat/core/minisat"
+		let path = "minisat"
 		let fileName = "board.txt"
 		
 		board <- splitOneOf "\n " <$> readFile fileName
-		let tmp = init board
-		let pruned = map readInt tmp
+		-- let tmp = init board
+		let pruned = map readInt $ init board
 		let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
 
 		
@@ -193,7 +193,7 @@ genMore = do
 		writeFile "answer.txt" ans 
 
 -- Several flag and it's usage 
-usage   = putStrLn "Usage ./sudoku_solve [input-file] [minisat-path]"
+usage   = putStrLn "Usage ./sudoku_solve [input-file]"
 version = putStrLn "Version 0.1"
 exit    = exitWith ExitSuccess
 die     = exitWith (ExitFailure 1)
