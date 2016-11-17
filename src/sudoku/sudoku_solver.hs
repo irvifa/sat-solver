@@ -91,7 +91,7 @@ cnfToDIMACS cnf = header ++ (unlines $ map showClause cnf)
 minisatRunner (cnf,path) = do
 	let dimacs = cnfToDIMACS cnf
 	writeFile "sudoku.cnf" dimacs
-	let cmd = path++" sudoku.cnf sudoku.out"
+	let cmd = path ++ " sudoku.cnf sudoku.out"
 	system cmd
 	vars <- preProcessOutput <$> readFile "sudoku.out"
 	return vars
@@ -124,11 +124,6 @@ sudokuSolve (matrix,path) = do
 	minisatout <- minisatRunner (cnf,path)
 	return $ modelToMatrix (minisatout,sizeOfBoard)
 
--- Given a sudoku string return a sudoku  matrix.
--- The parameter that being given here is a string and will be converted to int
--- before being mapped and the n converted into a matrix
-stringToMatrix string = map (map (\ a -> readInt [a])) $ lines string
-
 -- Return a string as a solution of given sudoku matrix
 showMatrix [] = "no solution"
 showMatrix grid = unlines $ map (foldr ((++).show) []) grid
@@ -159,6 +154,44 @@ wrapper args = do
 			let matrix = chunksOf sizeOfBoard pruned
 			solveList (matrix,sizeOfBoard,path)
 
+-- Generate more solution
+genMore = do
+		let cnfFile = "sudoku.cnf"
+		let solFile = "sudoku.out"
+		let path = "./../minisat/core/minisat"
+		let fileName = "board.txt"
+		
+		board <- splitOneOf "\n " <$> readFile fileName
+		let tmp = init board
+		let pruned = map readInt tmp
+		let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
+
+		
+		contents <- splitOneOf "\n " <$> readFile solFile
+		let pruned = map readInt $ init $ tail contents
+		let tmp =  intercalate " " $ map show $ map ( * (-1) ) pruned
+		let res = tmp ++ "\n"
+		appendFile cnfFile res
+
+
+		cnf <- splitOneOf "\n" <$> readFile "sudoku.cnf"
+		let fiCnf = splitOneOf " " $ head cnf
+		let lastCnf = tail cnf
+		let fiRow = (readInt $ last fiCnf) + 1
+		let restRow = intercalate " " (init fiCnf ++ [show fiRow])
+		let newCnf = intercalate "\n" $ init $ restRow:lastCnf 
+		writeFile "newCnf.txt" newCnf
+		
+		let mv = "mv newCnf.txt sudoku.cnf"
+		system mv
+
+		let cmd = path ++ " sudoku.cnf sudoku.out"
+		system cmd
+
+		minisatout <- preProcessOutput <$> readFile "sudoku.out"
+		let ans = showMatrix $ modelToMatrix (minisatout,sizeOfBoard)
+		writeFile "answer.txt" ans 
+
 -- Several flag and it's usage 
 usage   = putStrLn "Usage ./sudoku_solve [input-file] [minisat-path]"
 version = putStrLn "Version 0.1"
@@ -167,6 +200,7 @@ die     = exitWith (ExitFailure 1)
 
 parse ["-h"] = usage   >> exit
 parse ["-v"] = version >> exit
+parse ["-n"] = genMore >> exit
 parse []     = usage   >> exit
 parse args     =  wrapper args >> exit
 
