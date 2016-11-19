@@ -90,9 +90,6 @@ cnfToDIMACS cnf = header ++ (unlines $ map showClause cnf)
 -- otherwise it's false
 minisatRunner (cnf,path) = do
 	let dimacs = cnfToDIMACS cnf
-	let a = lines dimacs
-	let w = filter (\x -> length x > 3) a
-	print a
 	writeFile "sudoku.cnf" dimacs
 	let cmd = path ++ " sudoku.cnf sudoku.out"
 	system cmd
@@ -153,37 +150,31 @@ wrapper args = do
 			contents <- splitOneOf "\n " <$> readFile fileName
 			let tmp = init contents
 			let pruned = map readInt tmp
-			--print pruned
 			let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
 			let matrix = chunksOf sizeOfBoard pruned
 			solveList (matrix,sizeOfBoard,path)
 
 -- Generate more solution
-genMore = do
+genMore path = do
 		let cnfFile = "sudoku.cnf"
 		let solFile = "sudoku.out"
-		let path = "minisat"
 		let fileName = "board.txt"
 		
 		board <- splitOneOf "\n " <$> readFile fileName
-		-- let tmp = init board
 		let pruned = map readInt $ init board
 		let sizeOfBoard = round (sqrt (fromIntegral $ length pruned)) 
-
 		
 		contents <- splitOneOf "\n " <$> readFile solFile
 		let pruned = map readInt $ init $ tail contents
-		let tmp =  intercalate " " $ map show $ map ( * (-1) ) pruned
-		let res = tmp ++ "\n"
+		let res =  (intercalate " " $ map show $ map ( * (-1) ) pruned) ++ "\n"
+		
 		appendFile cnfFile res
-
 
 		cnf <- splitOneOf "\n" <$> readFile "sudoku.cnf"
 		let fiCnf = splitOneOf " " $ head cnf
-		let lastCnf = tail cnf
 		let fiRow = (readInt $ last fiCnf) + 1
-		let restRow = intercalate " " (init fiCnf ++ [show fiRow])
-		let newCnf = intercalate "\n" $ init $ restRow:lastCnf 
+		let restRow = intercalate " " (init (splitOneOf " " $ head cnf) ++ [show fiRow])
+		let newCnf = intercalate "\n" $ init $ restRow:(tail cnf)
 		writeFile "newCnf.txt" newCnf
 		
 		let mv = "mv newCnf.txt sudoku.cnf"
@@ -204,11 +195,16 @@ die     = exitWith (ExitFailure 1)
 
 parse ["-h"] = usage   >> exit
 parse ["-v"] = version >> exit
-parse ["-n"] = genMore >> exit
-parse []     = usage   >> exit
-parse args     =  wrapper args >> exit
+parse args  =  do
+				let a = head args
+				if a == "-n"
+					then 
+					if length args == 1
+						then genMore "./../minisat/core/minisat" >> exit
+						else genMore (last args) >> exit
+					else  wrapper args >> exit
 
 guide  = unlines . reverse . lines
 
 -- Main function
-main = getArgs >>= parse >>= putStr . guide
+main = getArgs >>= parse >>= putStr . guide>>= parse >>= putStr . guide
