@@ -207,4 +207,4 @@ parse args  =  do
 guide  = unlines . reverse . lines
 
 -- Main function
-main = getArgs >>= parse >>= putStr . guide>>= parse >>= putStr . guide
+main = getArgs >>= parse >>= putStr . guide
