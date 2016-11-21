@@ -1,5 +1,9 @@
 # computational-logic-assignment
 
+## Prerequisites
+
+Install `ghc` and python `kivy` module
+
 ### Build
 
 ```bash
