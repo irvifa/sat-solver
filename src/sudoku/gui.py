@@ -24,7 +24,7 @@ class Board(FloatLayout):
     def solve(self):
         values = [[self.get_value(row, col) for col in range(self.board_size)] for row in range(self.board_size)]
         self.write_to_file(values)
-        os.system("./sudoku_solver board.txt ./../minisat/core/minisat")
+        os.system("./sudoku_solver board.txt")
         if not self.read_output():
             error_message = ErrorMessage()
             self.error_message = error_message
@@ -41,6 +41,14 @@ class Board(FloatLayout):
                     target.write(str(values[i][j]))
             target.write("\n")
         target.close()
+
+    def gen_more(self):
+        os.system("./sudoku_solver -n")
+        if not self.read_output():
+            error_message = ErrorMessage()
+            self.error_message = error_message
+            self.add_widget(error_message)
+            Clock.schedule_once(self.remove_error_message, 2)
 
     def read_output(self):
         with open("answer.txt") as target:

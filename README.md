@@ -1,8 +1,5 @@
 # computational-logic-assignment
 
-## docs
-
-
 ### Build
 
 ```bash
@@ -32,9 +29,15 @@ make clean
 ### Run
 
 ```bash
-make run PUZZLE=${PATH_TO_PUZZLE}
+make run PUZZLE=${PATH_TO_PUZZLE} MINISATPATH=${MINISAT_PATH}
 ```
 
 For example `make run PUZZLE=example/puzzle9x9 MINISATPATH="./../minisat/core/minisat"`
 
+### Generate Next Solution
 
+If the previous solution available, we could generate more solution
+
+```bash
+make next MINISATPATH=${MINISAT_PATH}
+```

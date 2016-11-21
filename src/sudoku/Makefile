@@ -1,4 +1,4 @@
-.PHONY: build run clean show
+.PHONY: build run clean show next
 
 build:
 	ghc -o sudoku_solver sudoku_solver.hs
@@ -11,3 +11,6 @@ clean:
 
 show:
 	cat answer.txt
+
+next:
+	./sudoku_solver -n ${MINISATPATH}

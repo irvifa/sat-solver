@@ -133,7 +133,6 @@ showMatrix grid = unlines $ map (foldr ((++).show) []) grid
 -- solveList ([],_) = do return 0
 solveList (list,sizeOfBoard,path) = do
 	let (puzzle, rest) = splitAt sizeOfBoard list
-	-- let mat = stringToMatrix $ unlines puzzle
 	solution <- sudokuSolve (list,path)
 	let ans = showMatrix solution
 	writeFile "answer.txt" ans 
@@ -187,7 +186,7 @@ genMore path = do
 		let ans = showMatrix $ modelToMatrix (minisatout,sizeOfBoard)
 		writeFile "answer.txt" ans 
 
--- Several flag and it's usage 
+-- Several flag and its usage 
 usage   = putStrLn "Usage ./sudoku_solve [input-file]"
 version = putStrLn "Version 0.1"
 exit    = exitWith ExitSuccess
@@ -200,7 +199,7 @@ parse args  =  do
 				if a == "-n"
 					then 
 					if length args == 1
-						then genMore "./../minisat/core/minisat" >> exit
+						then genMore "minisat" >> exit
 						else genMore (last args) >> exit
 					else  wrapper args >> exit
 
